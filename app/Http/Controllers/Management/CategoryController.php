@@ -67,7 +67,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('management.editCategory')->with('category', $category);
     }
 
     /**
@@ -79,7 +80,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:categories|max:255'
+        ]);
+
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->save();
+        $request->session()->flash('status', $request->name. " is updated successfully.");
+        return(redirect('/management/category'));
     }
 
     /**
