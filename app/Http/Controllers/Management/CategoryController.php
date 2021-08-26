@@ -88,7 +88,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->save();
         $request->session()->flash('status', $request->name. " is updated successfully.");
-        return(redirect('/management/category'));
+        return redirect('/management/category');
     }
 
     /**
@@ -99,6 +99,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Category::destroy($id);
+        Session()->flash('status', "The category is deleted successfully.");
+        return redirect('/management/category');
     }
 }
