@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Management;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
+use App\Menu;
 
 class MenuController extends Controller
 {
@@ -37,7 +38,32 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:menus|max:255',
+            'price' =>'required|numeric',
+            'category_id' =>'required|numeric',
+        ]);
+        // if a user does not upload an image, use noimage.png for the menu
+        $imageName = "noimage.png";
+
+        // if a user upload image
+        if($request->image){
+            $request->validate([
+                'image' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5000'
+            ]);
+            $imageName = date('mdYHis').uniqid().'.'.$request->image->extension();
+            $request->image->move(public_path('menu_images'), $imageName);
+        }
+        // save information to Menus table
+        $menu = new Menu();
+        $menu->name = $request->name;
+        $menu->price = $request->price;
+        $menu->image = $imageName;
+        $menu->description = $request->description;
+        $menu->category_id = $request->category_id;
+        $menu->save();
+        $request->session()->flash('status', $request->name. " is saved successfully.");
+        return(redirect('/management/menu'));
     }
 
     /**
