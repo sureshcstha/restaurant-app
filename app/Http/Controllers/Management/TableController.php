@@ -64,7 +64,8 @@ class TableController extends Controller
      */
     public function edit($id)
     {
-        //
+        $table = Table::find($id);
+        return view('management.editTable')->with('table', $table);
     }
 
     /**
@@ -76,7 +77,14 @@ class TableController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // information validation
+        $request->validate(['name' => 'required|unique:tables|max:255']);
+        $table = Table::find($id);
+        $table->name = $request->name;
+        $table->save();
+        $request->session()->flash('status', 'The table is updated to '. $request->name. " successfully.");
+        return(redirect('/management/table'));
+
     }
 
     /**

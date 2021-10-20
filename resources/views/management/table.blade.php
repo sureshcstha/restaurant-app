@@ -31,11 +31,12 @@
                             <td>{{$table->id}}</td>
                             <td>{{$table->name}}</td>
                             <td>{{$table->status}}</td>
-                            <td></td>
+                            <td>
+                                <a href="/management/table/{{$table->id}}/edit" class="btn btn-warning">Edit</a>
+                            </td>
                             <td></td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
 
