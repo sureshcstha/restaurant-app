@@ -95,6 +95,8 @@ class TableController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Table::destroy($id);
+        Session()->flash('status', "The table is deleted successfully.");
+        return redirect('/management/table');
     }
 }
