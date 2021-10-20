@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Management;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Table;
 
 class TableController extends Controller
 {
@@ -24,7 +25,7 @@ class TableController extends Controller
      */
     public function create()
     {
-        //
+        return view('management.createTable');
     }
 
     /**
@@ -35,7 +36,12 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(['name' => 'required|unique:tables|max:255']);
+        $table = new Table();
+        $table->name = $request->name;
+        $table->save();
+        $request->session()->flash('status', 'Table '. $request->name. " is created successfully.");
+        return(redirect('/management/table'));
     }
 
     /**
