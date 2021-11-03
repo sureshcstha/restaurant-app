@@ -6,6 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <button class="btn btn-primary btn-block" id="btn-show-tables">View All Tables</button>
+            <div id="selected-table"></div>
         </div>
         <div class="col-md-7">
             <nav>
@@ -39,7 +40,6 @@ $(document).ready(function(){
             $("#btn-show-tables").html('View All Tables').removeClass('btn-danger').addClass('btn-primary');
         }
     });
-});
 
   // load menus by category
   $(".nav-link").click(function(){
@@ -49,5 +49,17 @@ $(document).ready(function(){
       $("#list-menu").fadeIn('fast');
     });
   })
+
+  var SELECTED_TABLE_ID = "";
+  var SELECTED_TABLE_NAME = "";
+  
+// detect button table onclick to show table data
+$("#table-detail").on("click", ".btn-table", function(){
+    SELECTED_TABLE_ID = $(this).data("id");
+    SELECTED_TABLE_NAME = $(this).data("name");
+    $("#selected-table").html('<br><h3>Table: '+SELECTED_TABLE_NAME+'</h3><hr>');
+});
+
+});
 </script>
 @endsection
