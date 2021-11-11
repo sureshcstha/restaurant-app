@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Table;
 use App\Category;
 use App\Menu;
+use App\Sale;
+use App\SaleDetail;
+use Illuminate\Support\Facades\Auth;
 
 class CashierController extends Controller
 {
@@ -53,6 +56,40 @@ class CashierController extends Controller
     }
 
     public function orderFood(Request $request) {
-        return $request->menu_id;
+        $menu = Menu::find($request->menu_id);
+        $table_id = $request->table_id;
+        $table_name = $request->table_name;
+        $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+        // if there is no sale for selected table, create a new one
+        if(!$sale) {
+            $user = Auth::user();
+            $sale = new Sale();
+            $sale->table_id = $table_id;
+            $sale->table_name = $table_name;
+            $sale->user_id = $user->id;
+            $sale->user_name = $user->name;
+            $sale->save();
+            $sale_id = $sale->id;
+            // update table status
+            $table = Table::find($table_id);
+            $table->status = 'unavailable';
+            $table->save();
+        } else { // if there is a sale for selected table, use that sale
+            $sale_id = $sale->id;
+        }
+
+        // add ordered menu to sale_details table
+        $saleDetail = new SaleDetail();
+        $saleDetail->sale_id = $sale_id;
+        $saleDetail->menu_id = $menu->id;
+        $saleDetail->menu_name = $menu->name;
+        $saleDetail->menu_price = $menu->price;
+        $saleDetail->quantity = $request->quantity;
+        $saleDetail->save();
+        // update total price in the sales table
+        $sale->total_price = $sale->total_price + ($menu->price * $request->quantity);
+        $sale->save();
+
+        return $sale->total_price;
     }
 }
