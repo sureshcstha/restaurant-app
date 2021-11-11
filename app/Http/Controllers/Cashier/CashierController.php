@@ -51,4 +51,8 @@ class CashierController extends Controller
         }
         return $html;
     }
+
+    public function orderFood(Request $request) {
+        return $request->menu_id;
+    }
 }
