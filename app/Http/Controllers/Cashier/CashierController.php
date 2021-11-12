@@ -129,7 +129,9 @@ class CashierController extends Controller
         <tbody>';
         $showBtnPayment = true;
         foreach($saleDetails as $saleDetail){
-          
+            if($saleDetail->status == 'noConfirm'){
+                $showBtnPayment = false;
+            }
             $html .= '
             <tr>
                 <td>'.$saleDetail->menu_id.'</td>
@@ -146,7 +148,22 @@ class CashierController extends Controller
         $sale = Sale::find($sale_id);
         $html .= '<hr>';
         $html .= '<h3>Total Amount: $'.number_format($sale->total_price).'</h3>';
+
+        if($showBtnPayment){
+            $html .= '<button data-id="'.$sale_id.'" class="btn btn-success 
+            btn-block btn-payment">Payment</button>';
+        }else{
+            $html .= '<button data-id="'.$sale_id.'" class="btn btn-warning 
+            btn-block btn-confirm-order">Confirm Order</button>';
+        }
     
+        return $html;
+    }
+
+    public function confirmOrderStatus(Request $request){
+        $sale_id = $request->sale_id;
+        $saleDetails = SaleDetail::where('sale_id', $sale_id)->update(['status'=>'confirm']);
+        $html = $this->getSaleDetails($sale_id);
         return $html;
     }
 }
