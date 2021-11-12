@@ -142,6 +142,10 @@ class CashierController extends Controller
             ';
         }
         $html .='</tbody></table></div>';
+
+        $sale = Sale::find($sale_id);
+        $html .= '<hr>';
+        $html .= '<h3>Total Amount: $'.number_format($sale->total_price).'</h3>';
     
         return $html;
     }
