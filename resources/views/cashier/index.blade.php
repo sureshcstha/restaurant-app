@@ -41,7 +41,7 @@
            <div class="input-group-prepend">
             <span class="input-group-text">$</span>
            </div> 
-           <input type="number" id="recieved-amount" class="form-control">
+           <input type="number" id="received-amount" class="form-control">
         </div>
         <div class="form-group">
           <label for="payment">Payment Type</label>
@@ -157,16 +157,16 @@ $("#order-detail").on("click", ".btn-delete-saledetail",function(){
 $("#order-detail").on("click", ".btn-payment", function(){
     var totalAmout = $(this).attr('data-totalAmount');
     $(".totalAmount").html("Total Amount " + totalAmout);
-    $("#recieved-amount").val('');
+    $("#received-amount").val('');
     $(".changeAmount").html('');
     SALE_ID = $(this).data('id');
 });
 
 // calcuate change
-$("#recieved-amount").keyup(function(){
+$("#received-amount").keyup(function(){
     var totalAmount = $(".btn-payment").attr('data-totalAmount');
-    var recievedAmount = $(this).val();
-    var changeAmount = recievedAmount - totalAmount;
+    var receivedAmount = $(this).val();
+    var changeAmount = receivedAmount - totalAmount;
     $(".changeAmount").html("Total Change: $" + changeAmount);
 
     //check if cashier enter the right amount, then enable or disable save payment button
@@ -179,9 +179,22 @@ $("#recieved-amount").keyup(function(){
 
 // save payment
 $(".btn-save-payment").click(function(){
-    var recievedAmount = $("#recieved-amount").val();
+    var receivedAmount = $("#received-amount").val();
     var paymentType = $("#payment-type").val();
     var saleId = SALE_ID;
+    $.ajax({
+        type: "POST",
+        data: {
+            "_token" : $('meta[name="csrf-token"]').attr('content'),
+            "saleID" : saleId,
+            "receivedAmount" : receivedAmount,
+            "paymentType" : paymentType
+        },
+        url: "/cashier/savePayment",
+        success: function(data){
+            window.location.href = data;
+        }
+    });
 });
 
 });
