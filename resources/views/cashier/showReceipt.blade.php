@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                 <td colspan="2">Paid Amount:</td>
-                <td colspan="2">${{number_format($sale->total_recieved, 2)}}</td>
+                <td colspan="2">${{number_format($sale->total_received, 2)}}</td>
                 </tr>
                 <tr>
                 <td colspan="2">Change:</td>
