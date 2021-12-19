@@ -40,3 +40,6 @@ Route::resource('management/category', 'Management\CategoryController');
 Route::resource('management/menu', 'Management\MenuController');
 
 Route::resource('management/table', 'Management\TableController');
+
+//routes for report
+Route::get('/report', 'Report\ReportController@index');
