@@ -98,7 +98,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->role = $request->role;
         $user->save();
-        $request->session()->flash('status', $request->name. ' is updated successfully.');
+        $request->session()->flash('status', $request->name. ' is updated successfully');
         return redirect('/management/user');
     }
 
@@ -110,6 +110,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
+        Session()->flash('status', 'The user is deleted successfully.');
+        return redirect('/management/user');
     }
 }
