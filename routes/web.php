@@ -43,6 +43,7 @@ Route::middleware(['auth', 'VerifyAdmin'])->group(function(){
     Route::resource('management/category','Management\CategoryController');
     Route::resource('management/menu','Management\MenuController');
     Route::resource('management/table','Management\TableController');
+    Route::resource('management/user','Management\UserController');
 
     //routes for report
     Route::get('/report', 'Report\ReportController@index');
