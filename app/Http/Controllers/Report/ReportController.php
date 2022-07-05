@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Sale;
 
+use App\Exports\SaleReportExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ReportController extends Controller
 {
     public function index(){
@@ -24,5 +27,9 @@ class ReportController extends Controller
             strtotime($request->dateStart.' 00:00:00')))->with('dateEnd', date("m/d/Y H:i:s", 
             strtotime($request->dateEnd.' 23:59:59')))->with('totalSale', $sales->sum('total_price'))
             ->with('sales', $sales->paginate(5));
+    }
+
+    public function export(Request $request){
+        return Excel::download(new SaleReportExport($request->dateStart, $request->dateEnd), 'saleReport.xlsx');
     }
 }
