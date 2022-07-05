@@ -98,7 +98,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->role = $request->role;
         $user->save();
-        $request->session()->flash('status', $request->name. ' is updated successfully');
+        $request->session()->flash('status', $request->name. ' is updated successfully.');
         return redirect('/management/user');
     }
 
