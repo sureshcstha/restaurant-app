@@ -129,11 +129,18 @@ class CashierController extends Controller
         <tbody>';
         $showBtnPayment = true;
         foreach($saleDetails as $saleDetail){
+
+            $decreaseButton = '<button class="btn btn-danger btn-sm btn-decrease-quantity">-</button>';
+
+            if($saleDetail->quantity > 1){
+                $decreaseButton = '<button data-id="'.$saleDetail->id.'" class="btn btn-danger btn-sm btn-decrease-quantity">-</button>';
+            }
+
             $html .= '
             <tr>
                 <td>'.$saleDetail->menu_id.'</td>
                 <td>'.$saleDetail->menu_name.'</td>
-                <td>'.$saleDetail->quantity.' <button data-id="'.$saleDetail->id.'" class="btn btn-primary btn-sm btn-increase-quantity">+</button></td>
+                <td>'. $decreaseButton. ' '. $saleDetail->quantity.' <button data-id="'.$saleDetail->id.'" class="btn btn-primary btn-sm btn-increase-quantity">+</button></td>
                 <td>'.$saleDetail->menu_price.'</td>
                 <td>'.($saleDetail->menu_price * $saleDetail->quantity).'</td>';
                 if($saleDetail->status == "noConfirm"){
@@ -173,6 +180,24 @@ class CashierController extends Controller
         // update total amount
         $sale = Sale::where('id', $saleDetail->sale_id)->first();
         $sale->total_price = $sale->total_price + $saleDetail->menu_price;
+        $sale->save();
+
+        $html = $this->getSaleDetails($saleDetail->sale_id);
+
+        return $html;
+    }
+
+    public function decreaseQuantity(Request $request){
+        $saleDetail_id = $request->saleDetail_id;
+
+        // update quantity
+        $saleDetail = SaleDetail::where('id', $saleDetail_id)->first();
+        $saleDetail->quantity = $saleDetail->quantity - 1;
+        $saleDetail->save();
+
+        // update total amount
+        $sale = Sale::where('id', $saleDetail->sale_id)->first();
+        $sale->total_price = $sale->total_price - $saleDetail->menu_price;
         $sale->save();
 
         $html = $this->getSaleDetails($saleDetail->sale_id);
