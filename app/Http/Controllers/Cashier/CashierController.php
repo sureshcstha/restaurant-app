@@ -50,7 +50,7 @@ class CashierController extends Controller
                     <br>
                     '.$menu->name.'
                     <br>
-                    $'.number_format($menu->price).'
+                    $'.number_format($menu->price, 2).'
                 </a>
             </div>
             
