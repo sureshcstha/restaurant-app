@@ -199,7 +199,7 @@ $("#received-amount").keyup(function(){
     var totalAmount = $(".btn-payment").attr('data-totalAmount');
     var receivedAmount = $(this).val();
     var changeAmount = receivedAmount - totalAmount;
-    $(".changeAmount").html("Total Change: $" + changeAmount);
+    $(".changeAmount").html("Total Change: $" + changeAmount.toFixed(2));
 
     //check if cashier enter the right amount, then enable or disable save payment button
     if(changeAmount >= 0){
