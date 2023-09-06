@@ -156,7 +156,7 @@ class CashierController extends Controller
 
         $sale = Sale::find($sale_id);
         $html .= '<hr>';
-        $html .= '<h3>Total Amount: $'.number_format($sale->total_price).'</h3>';
+        $html .= '<h3>Total Amount: $'.number_format($sale->total_price, 2).'</h3>';
 
         if($showBtnPayment){
             $html .= '<button data-id="'.$sale_id.'" data-totalAmount="'.$sale->total_price.'" class="btn btn-success 
